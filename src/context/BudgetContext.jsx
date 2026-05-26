@@ -1,5 +1,7 @@
 import { createContext, useContext, useReducer, useEffect } from 'react'
 
+const DATA_VERSION = 3   // bump when INITIAL_EXPENSES structure changes
+
 export const FREQ_FACTORS = {
   weekly:   52 / 12,   // 4.3333
   biweekly: 26 / 12,   // 2.1667
@@ -77,6 +79,7 @@ const INITIAL_STATE = {
   ],
   debts: [],
   babyStep: 1,
+  dataVersion: DATA_VERSION,
 }
 
 function migrateExpense(e) {
@@ -140,22 +143,38 @@ export function BudgetProvider({ children }) {
       const saved = localStorage.getItem('budget-ramsey')
       if (!saved) return INITIAL_STATE
       const p = JSON.parse(saved)
-      const savedExpenses = (p.expenses ?? []).map(migrateExpense)
-      const savedIds = new Set(savedExpenses.map(e => e.id))
-      // Add any initial sub-categories missing from saved data (new items added after first install)
-      const mergedExpenses = [
-        ...savedExpenses,
-        ...INITIAL_EXPENSES.filter(e => !savedIds.has(e.id)),
-      ].sort((a, b) => a.id - b.id)
-
-      return {
+      const base = {
         ...INITIAL_STATE,
         ...p,
         incomeRaw:   p.incomeRaw  ?? p.monthlyIncome ?? 0,
         incomeFreq:  p.incomeFreq ?? 'monthly',
-        expenses:    mergedExpenses,
         investments: (p.investments ?? INITIAL_STATE.investments).map(migrateInvestment),
+        dataVersion: DATA_VERSION,
       }
+
+      // If data is old (wrong categories), reset expenses but keep user amounts by name match
+      if (!p.dataVersion || p.dataVersion < DATA_VERSION) {
+        const oldByName = {}
+        ;(p.expenses ?? []).forEach(e => {
+          const key = (e.name || '').toLowerCase().trim()
+          oldByName[key] = e
+        })
+        base.expenses = INITIAL_EXPENSES.map(e => {
+          const old = oldByName[(e.name || '').toLowerCase().trim()]
+          return old
+            ? { ...e, budgeted: old.budgeted ?? old.amount ?? 0, actual: old.actual ?? 0, note: old.note ?? e.note }
+            : e
+        })
+      } else {
+        const savedExpenses = (p.expenses ?? []).map(migrateExpense)
+        const savedIds = new Set(savedExpenses.map(e => e.id))
+        base.expenses = [
+          ...savedExpenses,
+          ...INITIAL_EXPENSES.filter(e => !savedIds.has(e.id)),
+        ].sort((a, b) => a.id - b.id)
+      }
+
+      return base
     } catch {
       return INITIAL_STATE
     }
