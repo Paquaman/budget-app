@@ -140,13 +140,20 @@ export function BudgetProvider({ children }) {
       const saved = localStorage.getItem('budget-ramsey')
       if (!saved) return INITIAL_STATE
       const p = JSON.parse(saved)
+      const savedExpenses = (p.expenses ?? []).map(migrateExpense)
+      const savedIds = new Set(savedExpenses.map(e => e.id))
+      // Add any initial sub-categories missing from saved data (new items added after first install)
+      const mergedExpenses = [
+        ...savedExpenses,
+        ...INITIAL_EXPENSES.filter(e => !savedIds.has(e.id)),
+      ].sort((a, b) => a.id - b.id)
+
       return {
         ...INITIAL_STATE,
         ...p,
-        // backward compat: old data used monthlyIncome
-        incomeRaw:  p.incomeRaw  ?? p.monthlyIncome ?? 0,
-        incomeFreq: p.incomeFreq ?? 'monthly',
-        expenses:    (p.expenses    ?? INITIAL_EXPENSES).map(migrateExpense),
+        incomeRaw:   p.incomeRaw  ?? p.monthlyIncome ?? 0,
+        incomeFreq:  p.incomeFreq ?? 'monthly',
+        expenses:    mergedExpenses,
         investments: (p.investments ?? INITIAL_STATE.investments).map(migrateInvestment),
       }
     } catch {

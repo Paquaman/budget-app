@@ -33,7 +33,7 @@ function AppContent() {
             <div className="flex items-center gap-4">
               {/* Logo iA stylisé */}
               <div className="flex items-center gap-1">
-                <div className="w-9 h-9 bg-ia-red rounded-lg flex items-center justify-center font-black text-white text-sm leading-none shadow">
+                <div className="w-9 h-9 bg-slate-400 rounded-lg flex items-center justify-center font-black text-white text-sm leading-none shadow">
                   iA
                 </div>
                 <div className="w-1 h-9 bg-ia-gold rounded-full mx-1 opacity-60" />
