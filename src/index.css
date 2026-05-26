@@ -1,10 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   body {
-    @apply bg-slate-50 text-slate-800 font-sans;
+    @apply bg-ia-gray text-ia-text font-sans;
   }
 }
 
@@ -13,27 +15,27 @@
     @apply bg-white rounded-2xl shadow-sm border border-slate-100 p-6;
   }
   .btn-primary {
-    @apply bg-ramsey-blue text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-900 transition-colors;
+    @apply bg-ia-navy text-white px-4 py-2 rounded-lg font-medium hover:bg-ia-navydark transition-colors;
   }
   .btn-secondary {
-    @apply bg-slate-100 text-slate-700 px-4 py-2 rounded-lg font-medium hover:bg-slate-200 transition-colors;
+    @apply bg-ia-blue text-ia-navy px-4 py-2 rounded-lg font-medium hover:bg-blue-100 transition-colors;
   }
   .btn-danger {
-    @apply bg-ramsey-red text-white px-3 py-1.5 rounded-lg text-sm font-medium hover:bg-red-900 transition-colors;
+    @apply bg-ia-red text-white px-3 py-1.5 rounded-lg text-sm font-medium hover:bg-ia-reddark transition-colors;
   }
   .input {
-    @apply w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent;
+    @apply w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ia-navy focus:border-transparent;
   }
   .label {
-    @apply block text-sm font-medium text-slate-600 mb-1;
+    @apply block text-xs font-semibold text-ia-muted mb-1 uppercase tracking-wide;
   }
   .nav-link {
     @apply flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all;
   }
   .nav-link-active {
-    @apply bg-ramsey-blue text-white shadow-md;
+    @apply bg-ia-red text-white shadow-md;
   }
   .nav-link-inactive {
-    @apply text-slate-600 hover:bg-slate-100;
+    @apply text-ia-muted hover:bg-ia-blue hover:text-ia-navy;
   }
 }
