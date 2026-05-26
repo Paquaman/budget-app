@@ -15,11 +15,11 @@ const BABY_STEPS = [
 ]
 
 export default function Dashboard() {
-  const { state, dispatch, totalIncome, totalExpenses, totalInvestments, totalDebtPayments, totalDebtBalance, remaining, ratios } = useBudget()
+  const { state, dispatch, totalIncome, totalBudgeted, totalActual, totalExpenses, totalInvestments, totalDebtPayments, totalDebtBalance, remaining, ratios } = useBudget()
 
   const expenseByCategory = state.expenses.reduce((acc, e) => {
-    if (e.amount > 0) {
-      acc[e.category] = (acc[e.category] || 0) + Number(e.amount)
+    if (e.budgeted > 0) {
+      acc[e.category] = (acc[e.category] || 0) + Number(e.budgeted)
     }
     return acc
   }, {})
@@ -38,7 +38,7 @@ export default function Dashboard() {
     <div className="space-y-6">
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <StatCard label="Revenus mensuels" value={fmt(totalIncome)} color="text-green-700" bg="bg-green-50" icon="💰" />
-        <StatCard label="Dépenses totales" value={fmt(totalExpenses)} color="text-blue-700" bg="bg-blue-50" icon="💸" />
+        <StatCard label="Dépenses budg." value={fmt(totalBudgeted)} color="text-blue-700" bg="bg-blue-50" icon="💸" />
         <StatCard label="Investissements" value={fmt(totalInvestments)} color="text-purple-700" bg="bg-purple-50" icon="📈" />
         <StatCard
           label="Solde restant"

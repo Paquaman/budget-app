@@ -5,9 +5,9 @@ const fmt = (n) => new Intl.NumberFormat('fr-CA', { style: 'currency', currency:
 
 export default function Debts() {
   const { state, dispatch, totalDebtBalance, totalDebtPayments } = useBudget()
-  const [newDebt, setNewDebt] = useState({ name: '', balance: '', interestRate: '', monthlyPayment: '', type: 'credit' })
+  const [newDebt, setNewDebt] = useState({ name: '', balance: '', interestRate: '', monthlyPayment: '', type: 'mortgage' })
 
-  const DEBT_TYPES = { credit: '💳 Carte de crédit', car: '🚗 Voiture', student: '🎓 Prêt étudiant', personal: '💰 Prêt personnel', other: '📌 Autre' }
+  const DEBT_TYPES = { mortgage: '🏠 Hypothèque', credit: '💳 Carte de crédit', car: '🚗 Voiture', student: '🎓 Prêt étudiant', personal: '💰 Prêt personnel', other: '📌 Autre' }
 
   const sortedDebts = [...state.debts].sort((a, b) => Number(a.balance) - Number(b.balance))
 
